@@ -18,6 +18,11 @@ typedef NS_ENUM(NSInteger, AMWaveTransitionType) {
     AMWaveTransitionTypeBounce
 };
 
+typedef NS_ENUM(NSInteger, AMWaveTransitionPushDirection) {
+    AMWaveTransitionPushDirectionFromLeft = 0,
+    AMWaveTransitionPushDirectionFromRight
+};
+
 @interface AMWaveTransition : NSObject <UIViewControllerAnimatedTransitioning>
 
 /**-----------------------------------------------------------------------------
@@ -47,6 +52,16 @@ typedef NS_ENUM(NSInteger, AMWaveTransitionType) {
  * Returns a AMWaveTransition instance.
  *
  * @param operation The UINavigationControllerOperation that determines the transition type (push or pop)
+ * @param type The transition type
+ * @param transitionPushDirection The push transition direction
+ */
++ (instancetype)transitionWithOperation:(UINavigationControllerOperation)operation andTransitionType:(AMWaveTransitionType)type transitionPushDirection:(AMWaveTransitionPushDirection)transitionPushDirection;
+
+/** New transition
+ *
+ * Returns a AMWaveTransition instance.
+ *
+ * @param operation The UINavigationControllerOperation that determines the transition type (push or pop)
  */
 - (instancetype)initWithOperation:(UINavigationControllerOperation)operation;
 
@@ -58,6 +73,16 @@ typedef NS_ENUM(NSInteger, AMWaveTransitionType) {
  * @param type The transition type
  */
 - (instancetype)initWithOperation:(UINavigationControllerOperation)operation andTransitionType:(AMWaveTransitionType)type;
+
+/** New transition
+ *
+ * Returns a AMWaveTransition instance.
+ *
+ * @param operation The UINavigationControllerOperation that determines the transition type (push or pop)
+ * @param type The transition type
+ * @param transitionPushDirection The push transition direction
+ */
+- (instancetype)initWithOperation:(UINavigationControllerOperation)operation andTransitionType:(AMWaveTransitionType)type transitionPushDirection:(AMWaveTransitionPushDirection)transitionPushDirection;
 
 /** Attach the interactive gesture
  *
@@ -92,6 +117,15 @@ typedef NS_ENUM(NSInteger, AMWaveTransitionType) {
  *
  */
 @property (assign, nonatomic) AMWaveTransitionType transitionType;
+
+/** Transition push direction
+ *
+ * Sets the direction from which the push animation starts.
+ * AMWaveTransitionPushDirectionFromRight is the default, like the standard push animation.
+ * The pop animation transitions in the opposite direction.
+ *
+ */
+@property (assign, nonatomic) AMWaveTransitionPushDirection transitionPushDirection;
 
 /** Animation duration
  *

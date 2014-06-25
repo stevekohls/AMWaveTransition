@@ -50,11 +50,22 @@ static const CGFloat MAX_DELAY = 0.15;
 
 - (instancetype)initWithOperation:(UINavigationControllerOperation)operation andTransitionType:(AMWaveTransitionType)type
 {
+    return [self initWithOperation:operation andTransitionType:type transitionPushDirection:AMWaveTransitionPushDirectionFromRight];
+}
+
++ (instancetype)transitionWithOperation:(UINavigationControllerOperation)operation andTransitionType:(AMWaveTransitionType)type transitionPushDirection:(AMWaveTransitionPushDirection)transitionPushDirection
+{
+    return [[self alloc] initWithOperation:operation andTransitionType:type transitionPushDirection:transitionPushDirection];
+}
+
+- (instancetype)initWithOperation:(UINavigationControllerOperation)operation andTransitionType:(AMWaveTransitionType)type transitionPushDirection:(AMWaveTransitionPushDirection)transitionPushDirection
+{
     self = [super init];
     if (self) {
         [self setup];
         _operation = operation;
         _transitionType = type;
+        _transitionPushDirection = transitionPushDirection;
     }
     return self;
 }
@@ -244,11 +255,15 @@ static const CGFloat MAX_DELAY = 0.15;
         
         delta = -SCREEN_WIDTH;
     }
+    if (self.transitionPushDirection == AMWaveTransitionPushDirectionFromLeft) {
+        delta = -1.0 * delta;
+    }
     
     // Move the destination in place
     toVC.view.frame = source;
     // And kick it aside
-    toVC.view.transform = CGAffineTransformMakeTranslation(SCREEN_WIDTH, 0);
+    CGFloat translation = (self.transitionPushDirection == AMWaveTransitionPushDirectionFromLeft) ? -SCREEN_WIDTH : SCREEN_WIDTH;
+    toVC.view.transform = CGAffineTransformMakeTranslation(translation, 0);
     
     // First step is required to trigger the load of the visible cells.
     [UIView animateWithDuration:0 delay:0 options:UIViewAnimationOptionCurveEaseIn animations:nil completion:^(BOOL done) {
@@ -265,7 +280,7 @@ static const CGFloat MAX_DELAY = 0.15;
             [fromVC.view setTransform:CGAffineTransformMakeTranslation(1, 0)];
             [toVC.view setTransform:CGAffineTransformIdentity];
 			[UIView animateWithDuration:self.duration + self.maxDelay delay:0 options:UIViewAnimationOptionCurveEaseIn animations:^{
-				[fromVC.view setTransform:CGAffineTransformMakeTranslation(SCREEN_WIDTH, 0)];
+				[fromVC.view setTransform:CGAffineTransformMakeTranslation(translation, 0)];
 			} completion:^(BOOL finished) {
 				[transitionContext completeTransition:YES];
 				[fromVC.view removeFromSuperview];
