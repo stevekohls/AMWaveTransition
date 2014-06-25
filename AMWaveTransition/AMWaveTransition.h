@@ -102,7 +102,7 @@ typedef NS_ENUM(NSInteger, AMWaveTransitionType) {
 
 /** Maximum animation delay
  *
- * Sets the max delay that a cell will wait beofre animating.
+ * Sets the max delay that a cell will wait before animating.
  *
  */
 @property (assign, nonatomic) CGFloat maxDelay;

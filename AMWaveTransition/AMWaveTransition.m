@@ -25,23 +25,17 @@
 
 #define SCREEN_WIDTH ((([UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationPortrait) || ([UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationPortraitUpsideDown)) ? [[UIScreen mainScreen] bounds].size.width : [[UIScreen mainScreen] bounds].size.height)
 
-#define DURATION    0.65
-#define MAX_DELAY   0.15
+static const CGFloat DURATION = 0.65;
+static const CGFloat MAX_DELAY = 0.15;
 
 - (instancetype)init
 {
-    self = [super init];
-    if (self) {
-        [self setup];
-        _operation = UINavigationControllerOperationNone;
-        _transitionType = AMWaveTransitionTypeNervous;
-    }
-    return self;
+    return [self initWithOperation:UINavigationControllerOperationNone];
 }
 
 + (instancetype)transitionWithOperation:(UINavigationControllerOperation)operation
 {
-    return [[self alloc] initWithOperation:operation andTransitionType:AMWaveTransitionTypeNervous];
+    return [[self alloc] initWithOperation:operation];
 }
 
 - (instancetype)initWithOperation:(UINavigationControllerOperation)operation
@@ -78,7 +72,7 @@
     [self.gesture setEdges:UIRectEdgeLeft];
     [navigationController.view addGestureRecognizer:self.gesture];
     
-    self.animator = [[UIDynamicAnimator alloc]initWithReferenceView:navigationController.view];
+    self.animator = [[UIDynamicAnimator alloc] initWithReferenceView:navigationController.view];
     self.attachmentsFrom = [@[] mutableCopy];
     self.attachmentsTo = [@[] mutableCopy];
 }
